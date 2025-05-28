@@ -1,0 +1,3 @@
+'1'|1234|2907|'Lucas Perdomo'|29-07-2000|29-07-2023|29-07-1994|'1245874589'|03303303333|'M'|'999580566'|'lucas@yahoo.com.br'|'Jolenio dos Santos'|'Casilda da Silva'|'Gerente'|'InformaticasSul'|'Gigabytche'|987456321
+'1'|1234|3008|'Jusglei da Silva'|29-07-2000|29-07-2023|29-07-1997|'456789123456'|09509509595|'M'|'999580544'|'jusglei@yahoo.com.br'|'Closvei Santos'|'Marimar da Silva'|'Tecnico'|'InformaticasSul'|'Gigabytche'|987456321
+'1'|1234|3109|'Marlei Cardoso'|29-07-2000|29-07-2023|29-07-1999|'5486987456'|19019019090|'F'|'999580555'|'marlei@yahoo.com.br'|'Jeris dos Santos'|'Marquiza da Silva'|'Auxiliar'|'InformaticasSul'|'Gigabytche'|987456321

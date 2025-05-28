@@ -1,0 +1,1 @@
+-- DELETE FROM flexsystems.dbo.SRD010

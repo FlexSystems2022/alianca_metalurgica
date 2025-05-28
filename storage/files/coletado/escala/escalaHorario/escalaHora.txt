@@ -1,0 +1,1 @@
+'Teste Escala'|'Teste Horario'
