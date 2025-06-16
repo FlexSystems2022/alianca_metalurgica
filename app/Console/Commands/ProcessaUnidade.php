@@ -146,11 +146,11 @@ class ProcessaUnidade extends Command
 
     private function enviaUnidadeAtualizar($unidade, $unidadeNexti)
     {
-        $externalId = $unidade->IDEXTERNO;
-        $this->info("Atualizando o unidade {$externalId}");
+        $id = $unidade->ID;
+        $this->info("Atualizando o unidade {$id}");
         
         // var_dump(json_encode($unidade));exit;
-        $endpoint = "businessunits/externalId/{$externalId}";
+        $endpoint = "businessunits/{$id}";
         $response = $this->restClient->put($endpoint, [], [
             'json' => $unidadeNexti
         ])->getResponse();
@@ -158,11 +158,11 @@ class ProcessaUnidade extends Command
         if (!$this->restClient->isResponseStatusCode(200) && !$this->restClient->isResponseStatusCode(201)) {
 
             $errors = $this->getResponseErrors();
-            $this->info("Problema ao atualizar o unidade {$externalId} na API Nexti: {$errors}");
+            $this->info("Problema ao atualizar o unidade {$id} na API Nexti: {$errors}");
 
             $this->atualizaRegistroComErro($unidade, 2, $errors);
         } else {
-            $this->info("Unidade {$externalId} atualizado com sucesso na API Nexti");
+            $this->info("Unidade {$id} atualizado com sucesso na API Nexti");
             
             $responseData = $this->restClient->getResponseData();
             $unidadeInserido = $responseData['value'];

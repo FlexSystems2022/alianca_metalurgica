@@ -166,32 +166,32 @@ class ProcessaTomadores extends Command
                 'active' => true
             ];
             
-            $ret = $this->enviaTomadorAtualizar($tomador->IDEXTERNO, $tomadorNexti);
+            $ret = $this->enviaTomadorAtualizar($tomador->ID, $tomadorNexti);
         }
     }
 
-    private function enviaTomadorAtualizar($externalId, $tomador)
+    private function enviaTomadorAtualizar($id, $tomador)
     {
-        $this->info("Atualizando o tomador {$externalId} via API Nexti");
+        $this->info("Atualizando o tomador {$id} via API Nexti");
 
-        $endpoint = "clients/externalId/{$externalId}";
+        $endpoint = "clients/{$id}";
         $response = $this->restClient->put($endpoint, [], [
             'json' => $tomador
         ])->getResponse();
 
         if (!$this->restClient->isResponseStatusCode(200)) {
             $errors = $this->getResponseErrors();
-            $this->info("Problema ao atualizar o tomador {$externalId} na API Nexti: {$errors}");
+            $this->info("Problema ao atualizar o tomador {$id} na API Nexti: {$errors}");
 
-            $this->atualizaRegistroComErro($externalId, 2, $errors);
+            $this->atualizaRegistroComErro($id, 2, $errors);
         } else {
-            $this->info("Tomador {$externalId} atualizado com sucesso na API Nexti");
+            $this->info("Tomador {$id} atualizado com sucesso na API Nexti");
             
             $responseData = $this->restClient->getResponseData();
             $tomadorInserido = $responseData['value'];
             $id = $tomadorInserido['id'];
 
-            $this->atualizaRegistro($externalId, 1, $id);
+            $this->atualizaRegistro($id, 1, $id);
         }
     }
 

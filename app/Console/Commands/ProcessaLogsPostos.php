@@ -186,7 +186,7 @@ class ProcessaLogsPostos extends Command
             Identificamos alguns registros que estão apresentando dificuldades na integração. Precisamos que sejam analisados e se possível corrigidos o quanto antes para garantir que o processo siga sem interrupções. Fique tranquilo, pois assim que corrigido a aplicação irá conseguir transmitir a informação, mas se mesmo assim o erro continuar ou você não souber o que fazer basta acionar nosso suporte pelo e-mail suporte@flexsystems.com.br Atenciosamente, Equipe Flex Systems
         ';
 
-        $mail->Subject = "MAXIPARK - Troca de Postos - " . date("d/m/Y");
+        $mail->Subject = "ALIANÇA - Troca de Postos - " . date("d/m/Y");
 
         $retorno['Cadastro de Postos'] = $this->buscaPostosErros();
         $retorno['Trocas de Postos'] = $this->buscaTrocaPostosErros();

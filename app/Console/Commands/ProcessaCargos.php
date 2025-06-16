@@ -145,7 +145,7 @@ class ProcessaCargos extends Command
         $this->info("Atualizando o cargo {$externalId} via API Nexti");
 
         $endpoint = "careers/externalId/{$dadosCargo->IDEXTERNO}";
-        //$endpoint = "careers/{$idCargo}";
+        // $endpoint = "careers/{$idCargo}";
         $response = $this->restClient->put($endpoint, [], [
             'json' => $cargo
         ])->getResponse();

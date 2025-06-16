@@ -38,6 +38,7 @@ class ProcessaEmpresas extends Command
             SELECT 
             'true' as active,
             ".env('DB_OWNER')."FLEX_EMPRESA.RAZSOC as companyName,
+            ".env('DB_OWNER')."FLEX_EMPRESA.ID as id,
             ".env('DB_OWNER')."FLEX_EMPRESA.IDEXTERNO as externalId,
             ".env('DB_OWNER')."FLEX_EMPRESA.NOMFIL as fantasyName,
             ".env('DB_OWNER')."FLEX_EMPRESA.CNPJ as companyNumber
@@ -175,36 +176,36 @@ class ProcessaEmpresas extends Command
         $nEmpresas = sizeof($empresas);
 
         foreach ($empresas as $itemEmpresa) {
-            $ret = $this->enviaEmpresaAtualizar($itemEmpresa->externalId, $itemEmpresa);
+            $ret = $this->enviaEmpresaAtualizar($itemEmpresa->id, $itemEmpresa);
         }
 
         $this->info("Total de {$nEmpresas} empresa(s) atualizados!");
     }
 
-    private function enviaEmpresaAtualizar($externalId, $empresa)
+    private function enviaEmpresaAtualizar($id, $empresa)
     {
-        $this->info("Atualizando a empresa {$externalId}");
+        $this->info("Atualizando a empresa {$id}");
 
         //var_dump($empresa->active);exit;
         $empresa->active = true;
-        $endpoint = "companies/externalId/{$externalId}";
+        $endpoint = "companies/{$id}";
         $response = $this->restClient->put($endpoint, [], [
             'json' => $empresa
         ])->getResponse();
 
         if (!$this->restClient->isResponseStatusCode(200) && !$this->restClient->isResponseStatusCode(201)) {
             $errors = $this->getResponseErrors();
-            $this->info("Problema ao atualizar a empresa {$externalId} na API Nexti: {$errors}");
+            $this->info("Problema ao atualizar a empresa {$id} na API Nexti: {$errors}");
 
-            $this->atualizaRegistroComErro($externalId, 2, $errors);
+            $this->atualizaRegistroComErro($id, 2, $errors);
         } else {
-            $this->info("Empresa {$externalId} atualizada com sucesso na API Nexti");
+            $this->info("Empresa {$id} atualizada com sucesso na API Nexti");
             
             $responseData = $this->restClient->getResponseData();
             $empresaInserido = $responseData['value'];
             $id = $empresaInserido['id'];
 
-            $this->atualizaRegistro($externalId, 1, $id);
+            $this->atualizaRegistro($id, 1, $id);
         }
     }
 

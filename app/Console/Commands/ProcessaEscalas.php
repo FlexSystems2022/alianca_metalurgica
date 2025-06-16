@@ -191,9 +191,9 @@ class ProcessaEscalas extends Command
                 $idHorario = $shift->IDHORARIO;
 
                 if($shift->TIPO_DIA == 'D'){
-                    $idHorario = 14458501;
+                    $idHorario = 14465396;
                 }elseif($shift->TIPO_DIA == 'C'){
-                    $idHorario = 14458502;
+                    $idHorario = 14465397;
                 }
 
                 $_shift = array(
@@ -221,7 +221,7 @@ class ProcessaEscalas extends Command
                 $escalaNexti['scheduleShifts'] = $scheduleShifts;
             }else{
                 $_shift = array(
-                    'shiftId' => 14458503,
+                    'shiftId' => 14465411,
                     'sequence' => 1,
                 );
 
@@ -326,14 +326,14 @@ class ProcessaEscalas extends Command
                 $idHorario = $shift->IDHORARIO;
 
                 if($shift->TIPO_DIA == 'D'){
-                    $idHorario = 14458501;
+                    $idHorario = 14465396;
                 }elseif($shift->TIPO_DIA == 'C'){
-                    $idHorario = 14458502;
+                    $idHorario =    14465397;
                 }
 
                 $_shift = array(
                     'shiftId' => intval($idHorario),
-                    //'shiftExternalId' => intval($shift->IDEXTERNOHORARIO),
+                    // 'shiftExternalId' => intval($shift->IDEXTERNOHORARIO),
                     'sequence' => $seq,
                 );
                 $scheduleShifts[] = $_shift;
@@ -355,7 +355,7 @@ class ProcessaEscalas extends Command
                 $escalaNexti['scheduleShifts'] = $scheduleShifts;
             }else{
                 $_shift = array(
-                    'shiftId' => 14458503,
+                    'shiftId' => 14465411,
                     'sequence' => 1,
                 );
 

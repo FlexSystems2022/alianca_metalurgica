@@ -85,7 +85,7 @@ class ProcessaLogs extends Command
             Identificamos alguns registros que estão apresentando dificuldades na integração. Precisamos que sejam analisados e se possível corrigidos o quanto antes para garantir que o processo siga sem interrupções. Fique tranquilo, pois assim que corrido a aplicação irá conseguir transmitir a informação, mas se mesmo assim o erro continuar ou você não souber o que fazer basta acionar nosso suporte pelo e-mail suporte@flexsystems.com.br Atenciosamente, Equipe Flex Systems
         ';
 
-        $mail->Subject      = "MAXIPARK - Cadastros - " . date("d/m/Y");
+        $mail->Subject      = "ALIANÇA - Cadastros - " . date("d/m/Y");
 
         // CARGOS
         $sql = 
@@ -533,8 +533,8 @@ class ProcessaLogs extends Command
             }
           $planilha->removeSheetByIndex(0);
             $writer = new Xlsx($planilha);
-            $arquivo = $writer->save('ERROS_MAXIPARK_CADASTROS_' . date('d-m-Y') . '.xlsx');
-            $mail->addAttachment('ERROS_MAXIPARK_CADASTROS_' . date('d-m-Y') . '.xlsx', 'ERROS_MAXIPARK_CADASTROS_' . date('d-m-Y') . '.xlsx');
+            $arquivo = $writer->save('ERROS_ALIANÇA_CADASTROS_' . date('d-m-Y') . '.xlsx');
+            $mail->addAttachment('ERROS_ALIANÇA_CADASTROS_' . date('d-m-Y') . '.xlsx', 'ERROS_ALIANÇA_CADASTROS_' . date('d-m-Y') . '.xlsx');
 
             $mail->AddAddress(env('EMAIL_LOG'));
             if ($possuiRegistro) {
@@ -547,7 +547,7 @@ class ProcessaLogs extends Command
             }else{
                 $this->insertDisparoLog(date('Y-m-d H:i:s'));
             }
-            unlink('ERROS_MAXIPARK_CADASTROS_' . date('d-m-Y') . '.xlsx');
+            unlink('ERROS_ALIANÇA_CADASTROS_' . date('d-m-Y') . '.xlsx');
         }
     }
 

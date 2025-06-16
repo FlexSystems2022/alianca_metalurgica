@@ -267,8 +267,8 @@ class ProcessaColaboradores extends Command
     {
         $this->info("Atualizando o colaborador {$externalId}");
         
-        $endpoint = "persons/externalId/{$externalId}";
-        // $endpoint = "persons/{$idColab}";
+        // $endpoint = "persons/externalId/{$externalId}";
+        $endpoint = "persons/{$idColab}";
         $response = $this->restClient->put($endpoint, [], [
             'json' => $colaborador
         ])->getResponse();

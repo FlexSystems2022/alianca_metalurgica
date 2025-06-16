@@ -62,7 +62,7 @@ class BuscaTrocaEscalas extends Command
 
     private function getUltimaDataTrocaEscalas()
     {
-        $dataRetro = date("Y-m-d", strtotime("-1 days"));
+        $dataRetro = date("Y-m-d", strtotime("-400 days"));
         //$dataRetro = date("Y-m-d", strtotime("2020-08-01"));
         $data = DateTime::createFromFormat('Y-m-d', $dataRetro);
         //var_dump($data);exit;

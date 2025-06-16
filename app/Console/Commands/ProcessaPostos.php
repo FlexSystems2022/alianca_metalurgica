@@ -132,7 +132,7 @@ class ProcessaPostos extends Command
                 'startDate' => date('dmYHis', strtotime($posto->DATCRI)),
                 'startDate' => '01011990000000',
                 'forceCompanyTransfer' => false,
-                'serviceTypeId' => 8253,
+                'serviceTypeId' => 8628,
                 'service' => 'Padrão',
                 'timezone' => $posto->TIMEZONE,
                 'vacantJob' => intval($posto->VAGAS),
@@ -144,10 +144,10 @@ class ProcessaPostos extends Command
             // if($posto->IDUNIDADE != null && $posto->IDUNIDADE > 0){
             //     $postoNexti['businessUnitId'] = $posto->IDUNIDADE;
             // }else{
-            //     $postoNexti['businessUnitId'] = 18107;
+            //     $postoNexti['businessUnitId'] = 22875;
             // }
 
-            $postoNexti['businessUnitId'] = 18107;
+            $postoNexti['businessUnitId'] = 22875;
 
             $posto->DATEXT = trim($posto->DATEXT);
             $posto->DATEXT = $posto->DATEXT == '' ? $posto->DATCRI : $posto->DATEXT;
@@ -267,10 +267,10 @@ class ProcessaPostos extends Command
             // if($posto->IDUNIDADE != null && $posto->IDUNIDADE > 0){
             //     $postoNexti['businessUnitId'] = $posto->IDUNIDADE;
             // }else{
-            //     $postoNexti['businessUnitId'] = 18107;
+            //     $postoNexti['businessUnitId'] = 22875;
             // }
 
-            $postoNexti['businessUnitId'] = 18107;
+            $postoNexti['businessUnitId'] = 22875;
 
             $posto->DATEXT = trim($posto->DATEXT);
 
@@ -317,6 +317,58 @@ class ProcessaPostos extends Command
         }
     }
 
+    private function getPostosDeletar()
+    {
+        $select = 
+        "
+            SELECT * FROM ".env('DB_OWNER')."FLEX_RET_POSTO
+            WHERE NOT EXISTS(
+                SELECT * FROM ".env('DB_OWNER')."FLEX_POSTO
+                WHERE ".env('DB_OWNER')."FLEX_POSTO.ID = ".env('DB_OWNER')."FLEX_RET_POSTO.ID
+            )
+        ";
+
+        $postos = DB::connection('sqlsrv')->select($select);
+
+        return $postos;
+    }
+
+    private function deletaPosto($externalId, $idPosto)
+    {
+        $this->info("Deletando o posto {$externalId}");
+        // dd($externalId);
+        //$endpoint = "workplaces/externalid/{$externalId}";
+        $endpoint = "workplaces/{$idPosto}";
+        $response = $this->restClient->delete($endpoint)->getResponse();
+
+        if (!$this->restClient->isResponseStatusCode(201) && !$this->restClient->isResponseStatusCode(200)) {
+            $errors = $this->getResponseErrors();
+            $this->info("Problema ao deletar o posto {$externalId} na API Nexti: {$errors}");
+
+        } else {
+            $this->info("Posto {$externalId} deletado com sucesso na API Nexti");
+            
+            $responseData = $this->restClient->getResponseData();
+        }
+    }
+
+    private function deletaPostos()
+    {
+        $this->info("Deletando:");
+
+        $postos = $this->getPostosDeletar();
+        $nPostos = sizeof($postos);
+
+        foreach ($postos as $posto) {
+
+            //var_dump($postoNexti);exit;
+
+            $ret = $this->deletaPosto($posto->EXTERNALID, $posto->ID);
+        }
+
+        $this->info("Total de {$nPostos} postos(s) atualizados!");
+    }
+
     /**
      * Execute the console command.
      *
@@ -327,6 +379,7 @@ class ProcessaPostos extends Command
         $this->restClient = new \App\Shared\Provider\RestClient('nexti');
         $this->restClient->withOAuthToken('client_credentials');
 
+        $this->deletaPostos();
         $this->enviaPostosAtualizar();
         $this->enviaPostosNovos();
     }

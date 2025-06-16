@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use DateTime;
 
-class BuscaPostos extends Command
+class BuscaCargos extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'BuscaPostos';
+    protected $signature = 'BuscaCargos';
 
     /**
      * The console command description.
@@ -60,16 +60,16 @@ class BuscaPostos extends Command
         return $responseData;
     }
 
-    private function getPostoRecursivo($page = 0)
+    private function getCargoRecursivo($page = 0)
     {
-        $response = $this->restClient->get("workplaces/all", [
+        $response = $this->restClient->get("careers/all", [
             'page' => $page,
             'size' => 100000,
         ])->getResponse();
 
         if (!$this->restClient->isResponseStatusCode(200)) {
             $errors = $this->getResponseErrors();
-            $this->info("Problema buscar colaboradores: {$errors}");
+            $this->info("Problema buscar cargos: {$errors}");
         } else {
             $responseData = $this->restClient->getResponseData();
             if ($responseData) {
@@ -81,7 +81,7 @@ class BuscaPostos extends Command
                 $this->info("API Nexti retornou os resultados: Pagina {$page}.");
                 //var_dump(sizeof($content));exit;
                 if (sizeof($content) > 0) {
-                    $this->excluirPostosAux();
+                    $this->excluirCargosAux();
 
                     foreach ($content as $reg) {
 
@@ -93,7 +93,7 @@ class BuscaPostos extends Command
                 // Chamada recursiva para carregar proxima pagina
                 $totalPages = $responseData['totalPages'];
                 if ($page < $totalPages) {
-                    $this->getPostoRecursivo($page + 1);
+                    $this->getCargoRecursivo($page + 1);
                 }
             } else {
                 $this->info("Não foi possível ler a resposta da consulta.");
@@ -101,10 +101,10 @@ class BuscaPostos extends Command
         }
     }
 
-    private function excluirPostosAux(){
+    private function excluirCargosAux(){
         $query = 
         "
-            DELETE FROM ".env('DB_OWNER')."FLEX_RET_POSTO
+            DELETE FROM ".env('DB_OWNER')."FLEX_RET_CARGO
         ";
 
         return DB::connection('sqlsrv')->statement($query);
@@ -113,45 +113,40 @@ class BuscaPostos extends Command
     private function verificaExiste($reg){
         $query = 
         "
-            SELECT * FROM ".env('DB_OWNER')."FLEX_RET_POSTO
-            WHERE ".env('DB_OWNER')."FLEX_RET_POSTO.ID = {$reg['id']}
+            SELECT * FROM ".env('DB_OWNER')."FLEX_RET_CARGO
+            WHERE ".env('DB_OWNER')."FLEX_RET_CARGO.ID = {$reg['id']}
         ";
 
         return DB::connection('sqlsrv')->statement($query);
     }
 
     private function addPosto($reg){
-        $reg['active'] = $reg['id']??0;
         $reg['id'] = $reg['id']??0;
         $reg['externalId'] = $reg['externalId']??0;
         $reg['name'] = $reg['name']??0;
-        $reg['finishDate'] = $reg['finishDate']??0;
-        $reg['costCenter'] = $reg['costCenter']??0;
-        $reg['businessUnitId'] = $reg['businessUnitId']??0;
 
         $reg['name'] = str_replace("'", "", $reg['name']);
         $reg['externalId'] = str_replace("'", "", $reg['externalId']);
-        $reg['costCenter'] = str_replace("'", "", $reg['costCenter']);
 
         $query = 
         "
-            INSERT INTO ".env('DB_OWNER')."FLEX_RET_POSTO(ID, EXTERNALID, NAME, FINISHDATE, COSTCENTER, BUSINESSUNITID)
-            VALUES({$reg['id']}, '{$reg['externalId']}', '{$reg['name']}', '{$reg['finishDate']}', '{$reg['costCenter']}', {$reg['businessUnitId']})
+            INSERT INTO ".env('DB_OWNER')."FLEX_RET_CARGO(ID, EXTERNALID, NAME)
+            VALUES({$reg['id']}, '{$reg['externalId']}', '{$reg['name']}')
         ";
 
         DB::connection('sqlsrv')->statement($query);
 
-        $this->info("Posto {$reg['name']} Inserido com Sucesso!");
+        $this->info("Cargo {$reg['name']} Inserido com Sucesso!");
     }
 
-    public function atualizaColaborador($reg){
+    public function atualizaCargo($reg){
         $reg['id'] = $reg['id']??0;
         $reg['externalId'] = $reg['externalId']??0;
         $reg['name'] = $reg['name']??0;
 
         $query = 
         "
-            UPDATE ".env('DB_OWNER')."FLEX_RET_POSTO
+            UPDATE ".env('DB_OWNER')."FLEX_RET_CARGO
             SET 
             EXTERNALID = '{$reg['externalId']}', 
             NAME = '{$reg['name']}'
@@ -160,7 +155,7 @@ class BuscaPostos extends Command
 
         DB::connection('sqlsrv')->statement($query);
 
-        $this->info("Posto {$reg['name']} Atualizado com Sucesso!");
+        $this->info("Cargo {$reg['name']} Atualizado com Sucesso!");
     }
 
     /**
@@ -173,7 +168,7 @@ class BuscaPostos extends Command
         $this->restClient = new \App\Shared\Provider\RestClient('nexti');
         $this->restClient->withOAuthToken('client_credentials');
 
-        $this->getPostoRecursivo();
+        $this->getCargoRecursivo();
         //$this->insereNovosColabProd();
     }
 }

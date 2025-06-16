@@ -82,7 +82,7 @@ class ProcessaLogsAusencias extends Command
             Identificamos alguns registros que estão apresentando dificuldades na integração. Precisamos que sejam analisados e se possível corrigidos o quanto antes para garantir que o processo siga sem interrupções. Fique tranquilo, pois assim que corrido a aplicação irá conseguir transmitir a informação, mas se mesmo assim o erro continuar ou você não souber o que fazer basta acionar nosso suporte pelo e-mail suporte@flexsystems.com.br Atenciosamente, Equipe Flex Systems
         ';
 
-        $mail->Subject      = "MAXIPARK - Ausencias - " . date("d/m/Y");
+        $mail->Subject      = "ALIANÇA - Ausencias - " . date("d/m/Y");
 
     
         // AUSÊNCIAS
